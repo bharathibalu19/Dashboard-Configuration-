@@ -1,0 +1,495 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <title>Halleyx Dashboard POC</title>
+
+    <!-- ✅ Gridstack CSS -->
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/gridstack@11.0.0/dist/gridstack.min.css">
+
+    <!-- ✅ Chart.js -->
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
+</head>
+
+<body>
+
+    <div class="customer-orders" id="dashboardView">
+
+        <h2>Customer Orders</h2>
+        <p class="subtitle">View and manage customer orders and details</p>
+
+        <!-- TABS -->
+        <div class="tabs">
+            <button class="tab active" onclick="showDashboardTab()">Dashboard</button>
+            <button class="tab" onclick="showTableTab()">Table</button>
+        </div>
+
+        <!-- DASHBOARD TAB -->
+        <div id="dashboardTab">
+
+            <!-- Dashboard empty state -->
+            <div id="dashboardEmptyState" class="empty-state">
+                <h3>Dashboard Not Configured</h3>
+                <p>Configure your dashboard to start viewing analytics</p>
+                <button class="primary-btn" onclick="openConfigure()">
+                    Configure dashboard
+                </button>
+            </div>
+
+            <div class="dashboard-grid">
+                <div id="dashboardGrid" class="grid-stack"></div>
+            </div>
+
+        </div>
+
+        <!-- TABLE TAB -->
+        <!-- <div id="emptyState">
+            <div class="empty-box">
+                <h3>No Orders Yet</h3>
+                <p>Click Create Order and enter your order information</p>
+                <button onclick="openCreateOrder()">Create Order</button>
+            </div>
+        </div> -->
+
+
+
+    </div>
+
+    <!-- ===== CONFIGURE DASHBOARD MODE ===== -->
+    <div id="configureView" class="configure-mode" style="display:none;">
+
+        <div class="config-header">
+            <button onclick="closeConfigure()">← </button>
+            <h3>Configure dashboard</h3>
+        </div>
+
+        <div class="config-body">
+            <!-- LEFT: Widget Library -->
+            <aside class="widget-panel">
+                <label>View Data For</label>
+                <select id="dateFilterConfig" onchange="reloadWidgets()">
+                    <option>All time</option>
+                    <option>Today</option>
+                    <option>Last 7 Days</option>
+                    <option>Last 30 Days</option>
+                    <option>Last 90 Days</option>
+                </select>
+                <div class="toggle-main">
+                    <h4 class="toggle">Charts</h4>
+                    <div class="widget-group">
+                        <div class="widget-item" draggable="true" data-type="bar">📊 Bar Chart</div>
+                        <div class="widget-item" draggable="true" data-type="line">📈 Line Chart</div>
+                        <div class="widget-item" draggable="true" data-type="pie">🥧 Pie Chart</div>
+                    </div>
+                </div>
+                <div class="toggle-main">
+                    <h4 class="toggle">Tables</h4>
+                    <div class="widget-group">
+                        <div class="widget-item" draggable="true" data-type="table">📋 Table</div>
+                    </div>
+                </div>
+                <div class="toggle-main">
+
+                    <h4 class="toggle">KPIs</h4>
+                    <div class="widget-group">
+                        <div class="widget-item" draggable="true" data-type="kpi">🔢 KPI Value</div>
+                    </div>
+                </div>
+                <!-- <h4>Charts</h4>
+                <div class="widget-item"  data-type="bar">📊 Bar Chart</div>
+                <div class="widget-item" data-type="line">📈 Line Chart</div>
+                <div class="widget-item"  data-type="pie">🥧 Pie Chart</div>
+
+                <h4>Tables</h4>
+                <div class="widget-item" draggable="true"  data-type="table">📋 Table</div>
+
+                <h4>KPIs</h4>
+                <div class="widget-item" draggable="true" data-type="kpi">🔢 KPI Value</div> -->
+            </aside>
+
+            <!-- <button onclick="addWidget('kpi')">KPI Value</button> -->
+
+            <!-- RIGHT: Grid -->
+            <main class="config-grid">
+                <div class="grid-stack" id="configGrid"></div>
+            </main>
+
+        </div>
+
+
+        <div class="config-footer">
+            <button onclick="closeConfigure()">Cancel</button>
+            <button onclick="saveAndExit()">Save</button>
+        </div>
+
+
+    </div>
+
+    <div id="settingsPanel" class="settings-panel">
+        <h4>Widget configuration</h4>
+
+        <!-- setting for a KPI widget -->
+
+        <!-- Widget title -->
+        <div id="kpiSettings" class="settings-section">
+
+            <label>Widget title *</label>
+            <input type="text" id="kpiTitle">
+
+            <label>Widget type *</label>
+            <input type="text" value="KPI" readonly>
+
+            <label>Description</label>
+            <textarea id="kpiDescription"></textarea>
+            <div class="error-text" id="metricError">Please fill the field</div>
+
+            <h5>Widget size</h5>
+            <label>Width</label>
+            <select id="kpiWidth">
+                <option value="2">2</option>
+                <option value="3">3</option>
+                <option value="4">4</option>
+            </select>
+
+            <label>Height</label>
+            <select id="kpiHeight">
+                <option value="2">2</option>
+                <option value="3">3</option>
+            </select>
+            <div class="error-text" id="heightError">Please select height</div>
+
+            <h5>Data settings</h5>
+            <label>Metric</label>
+            <select id="kpiMetric">
+                <option value="">Select metric</option>
+                <option value="customerid">Customer ID</option>
+                <option value="customername">Customer name</option>
+                <option value="email">Email id</option>
+                <option value="address">Address</option>
+                <option value="orderdate">Order date</option>
+                <option value="product">Product</option>
+                <option value="createdby">Created by</option>
+                <option value="status">Status</option>
+                <option value="totalamount">Total amount</option>
+                <option value="unitprice">Unit price</option>
+                <option value="quantity">Quantity</option>
+            </select>
+            <div class="error-text" id="aggregationError">Please select aggregation</div>
+
+            <label>Aggregation</label>
+            <select id="kpiAggregation">
+                <option value="">Aggregation</option>
+                <option value="sum">Sum</option>
+                <option value="avg">Average</option>
+                <option value="count">Count</option>
+            </select>
+            <div class="error-text" id="formatError">Please select data format</div>
+
+            <label>Format</label>
+            <select id="kpiFormat">
+                <option value="">Data format</option>
+                <option value="number">Number</option>
+                <option value="currency">Currency</option>
+                <option value="percentage">Percentage</option>
+            </select>
+
+            <label>Decimal precision</label>
+            <select id="kpiPrecision">
+                <option value="0">0</option>
+                <option value="1">1</option>
+                <option value="2">2</option>
+            </select>
+            <div class="settings-actions">
+                <button onclick="discardSettings()">Cancel</button>
+                <button onclick="saveSettings()">Save</button>
+            </div>
+        </div>
+
+
+        <!-- setting for a Chart widget -->
+        <div id="chartSettings" class="settings-section">
+
+            <!-- <div class="settings-tabs">
+                <button class="active">Data</button>
+                <button disabled>Styling</button>
+            </div> -->
+
+            <label>Widget title *</label>
+            <input type="text" id="chartTitle">
+
+            <label>Widget type *</label>
+            <select id="chartType">
+                <option value="bar">Bar</option>
+                <option value="line">Line</option>
+                <option value="area">Area</option>
+                <option value="scatter">Scatter</option>
+            </select>
+
+            <label>Description</label>
+            <textarea id="chartDescription"></textarea>
+
+            <h4>Widget size</h4>
+            <label>Width</label>
+            <input type="number" id="chartWidth">
+
+            <label>Height</label>
+            <input type="number" id="chartHeight">
+
+            <h4>Data settings</h4>
+            <label>X-axis</label>
+            <select id="chartXAxis">
+                <option value="date">Order date</option>
+                <option value="product">Product</option>
+                <option value="customer">Customer</option>
+            </select>
+
+            <label>Y-axis</label>
+            <select id="chartYAxis">
+                <option value="amount">Total amount</option>
+                <option value="quantity">Quantity</option>
+            </select>
+
+            <label>
+                <input type="checkbox" id="chartShowLabel"> Show data label
+            </label>
+
+            <div class="settings-actions">
+                <button onclick="discardSettings()">Cancel</button>
+                <button onclick="saveSettings()">Save</button>
+            </div>
+        </div>
+
+    </div>
+
+
+    <div id="discardModal" class="modal">
+        <div class="modal-box">
+            <p>Do you want to save your changes before navigating away</p>
+            <div class="modal-actions">
+                <button onclick="closeDiscardModal()">No</button>
+                <button class="danger" onclick="confirmDiscard()">Yes, discard</button>
+            </div>
+        </div>
+    </div>
+    <!-- success toaster notification -->
+
+    <div id="toast" class="toast">
+        <span class="toast-icon">✔</span>
+        <span class="toast-message">
+            All set! Your new widget has been added successfully!
+        </span>
+        <span class="toast-close" onclick="hideToast()">✕</span>
+    </div>
+
+    <!-- delete notification  -->
+
+    <div id="deleteModal" class="modal">
+        <div class="modal-box">
+            <div class="modal-header">
+                <h4>Delete</h4>
+                <span class="modal-close" onclick="closeDeleteModal()">✕</span>
+            </div>
+
+            <p id="deleteMessage">
+                Are you sure you want to delete this widget?
+            </p>
+
+            <div class="modal-actions">
+                <button onclick="closeDeleteModal()">Cancel</button>
+                <button class="danger" onclick="confirmDelete()">Delete</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Orders empty state -->
+    <!-- <div id="ordersEmptyState">
+    <p>Click Create Order and enter your order information</p>
+    <button onclick="openCreateOrder()">Create Order</button>
+</div>
+
+    <div id="tableSection" class="table-wrapper" style="display:none;">
+        <table>
+            <thead>
+                <tr>
+                    <th>First Name</th>
+                    <th>Last Name</th>
+                    <th>Email</th>
+                    <th>Phone</th>
+                    <th>Street</th>
+                    <th>City</th>
+                    <th>State</th>
+                    <th>Postal Code</th>
+                    <th>Country</th>
+                    <th>Product</th>
+                    <th>Quantity</th>
+                    <th>Unit Price ($)</th>
+                    <th>Total Amount ($)</th>
+                    <th>Status</th>
+                    <th>Created By</th>
+                </tr>
+            </thead>
+            <tbody id="orderRows"></tbody>
+        </table>
+    </div> -->
+
+    <!-- ================== TABLE TAB ================== -->
+    <div id="tableTab" style="display:none;">
+
+        <!-- EMPTY STATE (Shown when no orders exist) -->
+        <div id="ordersEmptyState" class="empty-state">
+            <h3>No Orders Yet</h3>
+            <p>Click Create Order and enter your order information</p>
+            <button class="primary-btn" onclick="openCreateOrder()">
+                Create Order
+            </button>
+        </div>
+
+        <!-- TABLE SECTION (Shown when orders exist) -->
+        <div id="tableSection" class="table-wrapper" style="display:none;">
+            <button class="primary-btn" onclick="openCreateOrder()">
+                Create Order
+            </button>
+            <table class="orders-table">
+                <thead>
+                    <tr>
+                        <th>First Name</th>
+                        <th>Last Name</th>
+                        <th>Email</th>
+                        <th>Phone</th>
+                        <th>Street Address</th>
+                        <th>City</th>
+                        <th>State / Province</th>
+                        <th>Postal Code</th>
+                        <th>Country</th>
+                        <th>Product</th>
+                        <th>Quantity</th>
+                        <th>Unit Price ($)</th>
+                        <th>Total Amount ($)</th>
+                        <th>Status</th>
+                        <th>Created By</th>
+                        <th>Actions</th>
+                    </tr>
+                </thead>
+
+                <tbody id="orderRows">
+                    <!-- Rows will be injected dynamically via JS -->
+                </tbody>
+            </table>
+
+        </div>
+
+    </div>
+
+
+    <!-- ================= CREATE ORDER MODAL ================= -->
+    <div id="orderModal" class="modal-overlay">
+
+        <div class="modal-box">
+
+            <!-- Header -->
+            <div class="modal-header">
+                <h3>Create Order</h3>
+                <span class="modal-close" onclick="closeCreateOrder()">✕</span>
+            </div>
+
+            <!-- Body -->
+            <form id="orderForm" class="modal-body">
+
+                <h4>Customer Information</h4>
+
+                <div class="form-grid">
+                    <input id="firstName" placeholder="First Name *">
+                    <input id="email" placeholder="Email ID *">
+
+                    <input id="lastName" placeholder="Last Name *">
+                    <input id="phone" placeholder="Phone Number *">
+
+                    <input id="street" placeholder="Street Address *">
+
+                    <input id="city" placeholder="City *">
+                    <input id="state" placeholder="State / Province *">
+
+                    <input id="postal" placeholder="Postal Code *">
+                    <select id="country">
+                        <option value="">Select Country *</option>
+                        <option>United States</option>
+                        <option>Canada</option>
+                        <option>Australia</option>
+                        <option>Singapore</option>
+                        <option>Hong Kong</option>
+                    </select>
+                </div>
+
+                <h4>Order Information</h4>
+
+                <div class="form-grid">
+                    <select id="product">
+                        <option value="">Choose Product *</option>
+                        <option>VoIP Corporate Package</option>
+                        <option>Business Internet 500 Mbps</option>
+                        <option>Fiber Internet 1 Gbps</option>
+                        <option>5G Unlimited Mobile Plan</option>
+                        <option>Fiber Internet 300 Mbps</option>
+                    </select>
+
+                    <input id="quantity" type="number" value="1" min="1">
+                    <input id="unitPrice" type="number" placeholder="$ Unit Price">
+                    <input id="totalAmount" readonly placeholder="$ Total Amount">
+
+                    <select id="status">
+                        <option value="">Status *</option>
+                        <option>Pending</option>
+                        <option>In Progress</option>
+                        <option>Completed</option>
+                    </select>
+
+                   <select id="createdBy" required>
+  <option value="">Created By *</option>
+  <option>Mr. Michael Harris</option>
+  <option>Mr. Ryan Cooper</option>
+  <option>Ms. Olivia Carter</option>
+  <option>Mr. Lucas Martin</option>
+</select>
+
+                </div>
+
+                <!-- Footer -->
+                <div class="modal-footer">
+                    <button type="button" onclick="closeCreateOrder()">Cancel</button>
+                    <button type="button" class="primary-btn" onclick="submitOrder()">Submit</button>
+                </div>
+
+            </form>
+        </div>
+    </div>
+
+    <!--  -->
+    <!-- Gridstack -->
+    <script src="https://cdn.jsdelivr.net/npm/gridstack@11.0.0/dist/gridstack-all.js"></script>
+
+    <!-- Chart.js -->
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+
+    <!-- Your app -->
+    <script src="{{ url_for('static', filename='js/app.js') }}"></script>
+
+
+    <!-- <script src="{{ url_for('static', filename='js/app.js') }}"></script> -->
+
+    <script>
+        document.querySelectorAll(".toggle").forEach(title => {
+            title.addEventListener("click", () => {
+                title.classList.toggle("active");
+                const group = title.nextElementSibling;
+                group.style.display =
+                    group.style.display === "block" ? "none" : "block";
+            });
+        });
+    </script>
+
+</body>
+
+</html>
