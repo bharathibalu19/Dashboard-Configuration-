@@ -92,29 +92,29 @@ Widgets automatically rearrange based on screen size.
 ## 1. Homepage
 
 <p align="center">
-  <img src="screenshots/1.png" width="1000" height="563"><br>
+  <img src="1.png" width="1000" height="563"><br>
   
 </p>
 
 ## 
 <p align="center">
-  <img src="screenshots/2.png" width="1000" height="563"><br>
+  <img src="2.png" width="1000" height="563"><br>
 </p>
 
 ##
 
 <p align="center">
-  <img src="screenshots/3.png" width="1000" height="563"><br>
+  <img src="3.png" width="1000" height="563"><br>
 </p>
 
 <p align="center">
-  <img src="screenshots/4.png" width="1000" height="563"><br>
+  <img src="4.png" width="1000" height="563"><br>
   <b>Image 4</b>
 </p>
 
 
 <p align="center">
-  <img src="screenshots/5.png" width="1000" height="563"><br>
+  <img src="5.png" width="1000" height="563"><br>
   <b>Image 5</b>
 </p>
 
@@ -128,23 +128,23 @@ Widgets automatically rearrange based on screen size.
 
 
 <p align="center">
-  <img src="screenshots/8.png" width="1000" height="563"><br>
+  <img src="8.png" width="1000" height="563"><br>
   <b>Image 8</b>
 </p>
 
 <p align="center">
-  <img src="screenshots/9.png" width="1000" height="563"><br>
+  <img src="9.png" width="1000" height="563"><br>
   <b>Image 9</b>
 </p>
 
 
 <p align="center">
-  <img src="screenshots/10.png" width="1000" height="563"><br>
+  <img src="10.png" width="1000" height="563"><br>
 </p>
 
 ## 
 <p align="center">
-  <img src="screenshots/11.png" width="1000" height="563"><br>
+  <img src="11.png" width="1000" height="563"><br>
 </p>
 
 
