@@ -29,16 +29,6 @@ Users can **drag & drop widgets**, configure them, and view analytics in a clean
 
 ## 🖥️ Dashboard Views
 
-### 🔹 Desktop View (12 Columns)
-![Desktop View](DashBoardScreenshort/1.png)
-
-### 🔹 Tablet View (8 Columns)
-![Tablet View](screenshots/dashboard_tablet.png)
-
-### 🔹 Mobile View (4 Columns)
-![Mobile View](screenshots/dashboard_mobile.png)
-
----
 
 ## ⚙️ Configure Dashboard Mode
 
@@ -47,7 +37,7 @@ Users can **drag & drop widgets**, configure them, and view analytics in a clean
 - Configure widget settings
 - Save dashboard layout
 
-![Configure Dashboard](screenshots/configure_dashboard.png)
+![Configure Dashboard](screenshots/1.png)
 
 ---
 
@@ -95,6 +85,8 @@ Widgets automatically rearrange based on screen size.
 ---
 
 ## ▶️ How to Run the Project
+
+
 
 ```bash
 # Install dependencies
