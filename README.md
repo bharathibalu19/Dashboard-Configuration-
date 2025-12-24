@@ -96,7 +96,7 @@ Widgets automatically rearrange based on screen size.
 
 ## 
 <p align="center">
-  <img src="screenshots/2.png" width="1000" height="563"><br>
+  <img src="Dashboard%20POC/screenshots/1.png" width="1000" height="563"><br>
 </p>
 
 ##
