@@ -87,24 +87,22 @@ Widgets automatically rearrange based on screen size.
 ## ▶️ How to Run the Project
 
 
-# Brownie
-
 ## 1. Homepage
 
 <p align="center">
-  <img src="1.png" width="1000" height="563"><br>
+  <img src="screenshots/1.png" width="1000" height="563"><br>
   
 </p>
 
 ## 
 <p align="center">
-  <img src="2.png" width="1000" height="563"><br>
+  <img src="screenshots/2.png" width="1000" height="563"><br>
 </p>
 
 ##
 
 <p align="center">
-  <img src="3.png" width="1000" height="563"><br>
+  <img src="screenshots/3.png" width="1000" height="563"><br>
 </p>
 
 <p align="center">
