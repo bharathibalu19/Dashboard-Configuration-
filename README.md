@@ -37,7 +37,7 @@ Users can **drag & drop widgets**, configure them, and view analytics in a clean
 - Configure widget settings
 - Save dashboard layout
 
-![Configure Dashboard](screenshots/1.png)
+![Configure Dashboard](1.png)
 
 ---
 
